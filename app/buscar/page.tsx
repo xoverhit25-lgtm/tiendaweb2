@@ -1,12 +1,12 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
-import { featuredProducts } from "@/data/featured-products"
 import { allCategories } from "@/lib/categories"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import WhatsAppButton from "@/components/whatsapp-button"
 import PaginatedProductGrid from "@/components/paginated-product-grid"
 import { slugify } from "@/lib/utils/slugify"
+import { createServerClient } from "@/lib/supabase/server"
 
 // Search page needs to be dynamic due to searchParams
 export const dynamic = "force-dynamic"
@@ -21,16 +21,29 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
   const searchQuery = q?.toLowerCase() || ""
 
-  // Search across ALL products
-  let searchResults = featuredProducts
+  // Search across ALL products from Supabase
+  let searchResults: any[] = []
 
   if (searchQuery) {
-    searchResults = featuredProducts.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchQuery) ||
-        product.category.toLowerCase().includes(searchQuery) ||
-        (product.description?.toLowerCase() || "").includes(searchQuery),
-    )
+    try {
+      const supabase = await createServerClient()
+      const { data, error } = await supabase
+        .from('products')
+        .select(
+          `
+          *,
+          quantity_variants(*),
+          flavor_variants(*)
+          `
+        )
+        .or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
+      
+      if (!error && data) {
+        searchResults = data
+      }
+    } catch (err) {
+      console.error('Search error:', err)
+    }
   }
 
   // Group results by category for filtering
