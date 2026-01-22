@@ -50,9 +50,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     match: product.category === category.name
   })
   
-  // Verify product belongs to the requested category
-  if (product.category !== category.name) {
-    console.log("[DETAIL] Product category mismatch. Expected:", category.name, "Got:", product.category)
+  // Verify product belongs to the requested category (case-insensitive)
+  const productCategoryNormalized = product.category.toLowerCase().trim()
+  const categoryNameNormalized = category.name.toLowerCase().trim()
+  
+  if (productCategoryNormalized !== categoryNameNormalized) {
+    console.log("[DETAIL] Product category mismatch. Expected:", categoryNameNormalized, "Got:", productCategoryNormalized)
     notFound()
   }
 
