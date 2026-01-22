@@ -363,7 +363,7 @@ export async function getProductsByCategory(category: string) {
         flavor_variants(*)
         `
       )
-      .eq('category', category)
+      .ilike('category', category)
       .order('name', { ascending: true })
     
     if (error) {
