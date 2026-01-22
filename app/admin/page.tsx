@@ -147,7 +147,13 @@ export default function AdminPage() {
             product
 
           const cleanData = Object.fromEntries(
-            Object.entries(createData).map(([k, v]) => [k, v === null ? undefined : v])
+            Object.entries(createData).map(([k, v]) => {
+              // Asegurarse que images sea un array válido
+              if (k === 'images' && (!Array.isArray(v) || v.length === 0)) {
+                return [k, undefined]
+              }
+              return [k, v === null ? undefined : v]
+            })
           )
 
           await createProduct(cleanData as any, quantityVariants, flavorVariants)
@@ -156,7 +162,13 @@ export default function AdminPage() {
             product
 
           const cleanData = Object.fromEntries(
-            Object.entries(updateData).map(([k, v]) => [k, v === null ? undefined : v])
+            Object.entries(updateData).map(([k, v]) => {
+              // Asegurarse que images sea un array válido
+              if (k === 'images' && (!Array.isArray(v) || v.length === 0)) {
+                return [k, undefined]
+              }
+              return [k, v === null ? undefined : v]
+            })
           )
 
           await updateProduct({
