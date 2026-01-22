@@ -15,9 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Loader2, X, Trash2, Save, Plus } from 'lucide-react'
+import { Loader2, X, Trash2, Save, Plus, Upload, Image as ImageIcon } from 'lucide-react'
 import type { AdminProductWithVariants, QuantityVariant, FlavorVariant } from '@/types/admin'
 import { ADMIN_CATEGORIES, ADMIN_STOCK_OPTIONS } from '@/types/admin'
+import { uploadProductImageAction } from '@/app/actions/admin-products'
 
 interface ProductFormProps {
   product: AdminProductWithVariants
@@ -56,9 +57,9 @@ const ProductForm = memo(function ProductForm({
   const [flavorVariants, setFlavorVariants] = useState<FlavorVariant[]>(
     product.flavor_variants || []
   )
-  const [imagePreviews, setImagePreviews] = useState<(string | null)[]>(
-    product.images || []
-  )
+  const [images, setImages] = useState<string[]>(product.images || [])
+  const [isUploadingImages, setIsUploadingImages] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const [localError, setLocalError] = useState<string | null>(null)
 
   // Validación básica del formulario
@@ -89,11 +90,39 @@ const ProductForm = memo(function ProductForm({
     if (!validateForm()) return
 
     try {
-      await onSave(formData, quantityVariants, flavorVariants)
+      await onSave({ ...formData, images }, quantityVariants, flavorVariants)
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : 'Error al guardar')
     }
   }
+
+  const handleImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || !files.length) return
+
+    setIsUploadingImages(true)
+    setUploadError(null)
+
+    try {
+      const uploadPromises = Array.from(files).map((file) =>
+        uploadProductImageAction(file, formData.id || 0)
+      )
+
+      const uploadedUrls = await Promise.all(uploadPromises)
+      setImages((prev) => [...prev, ...uploadedUrls])
+
+      // Limpiar input
+      e.target.value = ''
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Error subiendo imágenes')
+    } finally {
+      setIsUploadingImages(false)
+    }
+  }, [formData.id])
+
+  const handleRemoveImage = useCallback((index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index))
+  }, [])
 
   const handleAddQuantityVariant = useCallback(() => {
     const newVariant: QuantityVariant = {
@@ -312,6 +341,89 @@ const ProductForm = memo(function ProductForm({
                   </div>
                 </div>
               )}
+
+              {/* Multiple Images Upload */}
+              <div className="space-y-2 border-t pt-4">
+                <Label>Imágenes del Producto</Label>
+                <p className="text-sm text-muted-foreground">
+                  Sube múltiples imágenes para mostrar diferentes vistas del producto
+                </p>
+
+                {/* Upload Error */}
+                {uploadError && (
+                  <div className="rounded-md bg-red-50 p-2 text-sm text-red-800">
+                    {uploadError}
+                  </div>
+                )}
+
+                {/* File Input */}
+                <div className="relative">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={isLoading || isUploadingImages || !formData.id}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={isLoading || isUploadingImages || !formData.id}
+                      className="w-full cursor-pointer gap-2"
+                      onClick={() => document.getElementById('image-upload')?.click()}
+                    >
+                      {isUploadingImages ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Subiendo...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-4 w-4" />
+                          Seleccionar Imágenes
+                        </>
+                      )}
+                    </Button>
+                  </label>
+                </div>
+
+                {!formData.id && (
+                  <p className="text-xs text-amber-600">
+                    💡 Primero debes crear o cargar un producto para subir imágenes
+                  </p>
+                )}
+
+                {/* Images Grid */}
+                {images.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                    {images.map((imageUrl, index) => (
+                      <div
+                        key={index}
+                        className="group relative aspect-square overflow-hidden rounded-lg border border-muted bg-muted"
+                      >
+                        <Image
+                          src={imageUrl}
+                          alt={`Imagen ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          disabled={isLoading || isUploadingImages}
+                          className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-100"
+                        >
+                          <Trash2 className="h-5 w-5 text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Quantity Variants */}
