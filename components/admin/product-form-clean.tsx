@@ -95,7 +95,25 @@ const ProductForm = memo(function ProductForm({
         images,
         image: formData.image || images[0] || null,
       }
-      await onSave(dataToSave, quantityVariants, flavorVariants)
+
+      // Filtrar variantes vacías o inválidas
+      const validQuantityVariants = quantityVariants.filter(
+        (v) => v.min_quantity > 0 && v.price > 0
+      )
+      const validFlavorVariants = flavorVariants.filter(
+        (v) => v.name && v.name.trim()
+      )
+
+      console.log('[FORM] Guardando producto con variantes:', {
+        quantityVariants: validQuantityVariants,
+        flavorVariants: validFlavorVariants,
+      })
+
+      await onSave(
+        dataToSave,
+        validQuantityVariants.length > 0 ? validQuantityVariants : undefined,
+        validFlavorVariants.length > 0 ? validFlavorVariants : undefined
+      )
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : 'Error al guardar')
     }
