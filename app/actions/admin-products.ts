@@ -49,7 +49,7 @@ export async function getProducts(
   }
 
   if (category) {
-    countQuery = countQuery.eq('category', category)
+    countQuery = countQuery.ilike('category', category)
   }
 
   const { count, error: countError } = await countQuery
@@ -76,7 +76,7 @@ export async function getProducts(
   }
 
   if (category) {
-    dataQuery = dataQuery.eq('category', category)
+    dataQuery = dataQuery.ilike('category', category)
   }
 
   const { data, error: dataError } = await dataQuery
@@ -399,4 +399,43 @@ export async function deleteFlavorVariant(id: number): Promise<void> {
   if (error) {
     throw new Error(`Error eliminando variante: ${error.message}`)
   }
+}
+// ============================================================================
+// MANEJO DE IMÁGENES
+// ============================================================================
+
+/**
+ * Sube una imagen de producto a Supabase Storage
+ */
+export async function uploadProductImageAction(
+  file: File,
+  productId: number
+): Promise<string> {
+  const supabase = await createServerClient()
+
+  // Generar nombre de archivo único
+  const timestamp = Date.now()
+  const random = Math.random().toString(36).substring(7)
+  const extension = file.name.split('.').pop()
+  const filename = `product-${productId}-${timestamp}-${random}.${extension}`
+  const filepath = `products/${productId}/${filename}`
+
+  // Subir archivo
+  const { data, error } = await supabase.storage
+    .from('product-images')
+    .upload(filepath, file, {
+      cacheControl: '3600',
+      upsert: false,
+    })
+
+  if (error) {
+    throw new Error(`Error subiendo imagen: ${error.message}`)
+  }
+
+  // Obtener URL pública
+  const { data: publicUrlData } = supabase.storage
+    .from('product-images')
+    .getPublicUrl(filepath)
+
+  return publicUrlData.publicUrl
 }
