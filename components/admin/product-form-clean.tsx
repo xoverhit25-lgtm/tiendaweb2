@@ -18,7 +18,6 @@ import {
 import { Loader2, X, Trash2, Save, Plus, Upload, Image as ImageIcon } from 'lucide-react'
 import type { AdminProductWithVariants, QuantityVariant, FlavorVariant } from '@/types/admin'
 import { ADMIN_CATEGORIES, ADMIN_STOCK_OPTIONS } from '@/types/admin'
-import { uploadProductImageAction } from '@/app/actions/admin-products'
 
 interface ProductFormProps {
   product: AdminProductWithVariants
@@ -104,12 +103,14 @@ const ProductForm = memo(function ProductForm({
     setUploadError(null)
 
     try {
+      const { uploadProductImageAction } = await import('@/app/actions/admin-products')
+      
       const uploadPromises = Array.from(files).map((file) =>
         uploadProductImageAction(file, formData.id || 0)
       )
 
       const uploadedUrls = await Promise.all(uploadPromises)
-      setImages((prev) => [...prev, ...uploadedUrls])
+      setImages((prev: string[]) => [...prev, ...uploadedUrls])
 
       // Limpiar input
       e.target.value = ''
