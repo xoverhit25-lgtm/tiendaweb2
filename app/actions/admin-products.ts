@@ -85,11 +85,23 @@ export async function getProducts(
     throw new Error(`Error obteniendo productos: ${dataError.message}`)
   }
 
+  const products = (data || []) as AdminProductWithVariants[]
+  
+  console.log('[GET_PRODUCTS] Productos traídos:', {
+    count: products.length,
+    sampleProduct: products[0] ? {
+      id: products[0].id,
+      name: products[0].name,
+      quantityVariants: products[0].quantity_variants?.length || 0,
+      flavorVariants: products[0].flavor_variants?.length || 0,
+    } : null,
+  })
+
   const total = count || 0
   const totalPages = Math.ceil(total / pageSize)
 
   return {
-    items: (data || []) as AdminProductWithVariants[],
+    items: products,
     total,
     page,
     pageSize,
@@ -178,10 +190,22 @@ export async function createProduct(
     throw new Error('Ya existe un producto con este slug')
   }
 
+  // Normalizar categoría - mapear IDs antiguos a nombres correctos
+  const categoryNameMap: Record<string, string> = {
+    'accesorios-celular': 'Accesorios para celular',
+  }
+  
+  const normalizedCategory = categoryNameMap[productData.category.toLowerCase()] || productData.category
+  
+  const dataToInsert = {
+    ...productData,
+    category: normalizedCategory,
+  }
+
   // Crear producto
   const { data: product, error: productError } = await supabase
     .from('products')
-    .insert([productData])
+    .insert([dataToInsert])
     .select()
     .single()
 
@@ -256,9 +280,21 @@ export async function updateProduct(data: UpdateProductDTO): Promise<AdminProduc
     }
   }
 
+  // Normalizar categoría si está presente
+  const categoryNameMap: Record<string, string> = {
+    'accesorios-celular': 'Accesorios para celular',
+  }
+  
+  const normalizedUpdates = {
+    ...updates,
+    ...(updates.category && {
+      category: categoryNameMap[updates.category.toLowerCase()] || updates.category,
+    }),
+  }
+
   const { data: updated, error } = await supabase
     .from('products')
-    .update(updates)
+    .update(normalizedUpdates)
     .eq('id', id)
     .select(
       `
