@@ -19,31 +19,40 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { categoria, producto } = await params
   
-  console.log("[v0] ProductPage - categoria:", categoria, "producto:", producto)
+  console.log("[DETAIL] ProductPage - categoria:", categoria, "producto:", producto)
   
   // Verify category exists
   const category = allCategories.find((cat) => slugify(cat.name) === categoria)
-  console.log("[v0] Found category:", category?.name || "NOT FOUND")
+  console.log("[DETAIL] Found category:", category?.name || "NOT FOUND")
+  console.log("[DETAIL] Available categories:", allCategories.map(c => ({ name: c.name, slug: slugify(c.name) })))
   
   if (!category) {
-    console.log("[v0] Category not found, returning 404")
+    console.log("[DETAIL] Category not found, returning 404")
     notFound()
   }
   
   // Get product from database by slug
   const productResult = await getProductBySlug(producto)
+  console.log("[DETAIL] Product query result status:", productResult.status)
   
   if (productResult.status === 404 || !productResult.data) {
-    console.log("[v0] Product not found in database, returning 404")
+    console.log("[DETAIL] Product not found in database, returning 404. Error:", productResult.error)
     notFound()
   }
   
   const product = productResult.data.product
-  console.log("[v0] Found product from DB:", product?.name || "NOT FOUND")
+  console.log("[DETAIL] Found product from DB:", {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    category: product.category,
+    expectedCategory: category.name,
+    match: product.category === category.name
+  })
   
   // Verify product belongs to the requested category
   if (product.category !== category.name) {
-    console.log("[v0] Product category mismatch. Expected:", category.name, "Got:", product.category)
+    console.log("[DETAIL] Product category mismatch. Expected:", category.name, "Got:", product.category)
     notFound()
   }
 
