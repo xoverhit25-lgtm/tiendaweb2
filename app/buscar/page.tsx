@@ -38,11 +38,24 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         )
         .or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
       
-      if (!error && data) {
+      if (error) {
+        console.error('[SEARCH] Error fetching products:', error)
+      } else if (data) {
+        console.log(`[SEARCH] Found ${data.length} results for "${searchQuery}"`)
+        if (data.length > 0) {
+          console.log('[SEARCH] Sample product:', { 
+            id: data[0].id,
+            name: data[0].name,
+            slug: data[0].slug,
+            category: data[0].category,
+            image: data[0].image ? 'exists' : 'null',
+            images: data[0].images ? `${data[0].images.length} images` : 'null'
+          })
+        }
         searchResults = data
       }
     } catch (err) {
-      console.error('Search error:', err)
+      console.error('[SEARCH] Exception:', err)
     }
   }
 
