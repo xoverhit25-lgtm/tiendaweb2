@@ -41,11 +41,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
   
   const product = productResult.data.product
+  const quantityVariants = productResult.data.quantityVariants || []
+  const flavorVariants = productResult.data.flavorVariants || []
+  
   console.log("[DETAIL] Found product from DB:", {
     id: product.id,
     name: product.name,
     slug: product.slug,
     category: product.category,
+    quantityVariants: quantityVariants.length,
+    flavorVariants: flavorVariants.length,
     expectedCategory: category.name,
     match: product.category.toLowerCase().trim() === category.name.toLowerCase().trim()
   })
@@ -65,10 +70,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ?.filter((p: any) => p.id !== product.id)
     .slice(0, 4) || []
 
+  // Combinar producto con sus variantes
+  const productWithVariants = {
+    ...product,
+    quantityVariants,
+    flavorVariants,
+  }
+
   return (
     <>
       <Header />
-      <ProductDetail product={product} relatedProducts={relatedProducts} />
+      <ProductDetail product={productWithVariants} relatedProducts={relatedProducts} />
       <Footer />
     </>
   )
