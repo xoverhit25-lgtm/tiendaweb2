@@ -57,7 +57,6 @@ export async function login(email: string, password: string): Promise<LoginResul
     }
   }
 }
-}
 
 export async function logout(): Promise<void> {
   try {
