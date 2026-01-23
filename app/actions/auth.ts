@@ -1,25 +1,25 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { randomBytes, createHmac } from "crypto"
 
 declare global {
   var adminTokens: { [key: string]: { email: string; expiresAt: number } } | undefined
 }
 
-// Simple credentials for demo (in production, use Supabase Auth or proper auth system)
-// Change these credentials to your desired admin credentials
 const ADMIN_EMAIL = "usaimport@admin.com"
-const ADMIN_PASSWORD = "UsaImp0rt@2025$ecure!" // Change this to a secure password
+const ADMIN_PASSWORD = "UsaImp0rt@2025$ecure!"
 
 interface LoginResult {
   success: boolean
   error?: string
 }
 
+function generateToken(): string {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
+
 export async function login(email: string, password: string): Promise<LoginResult> {
   try {
-    // Validate credentials
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
       return {
         success: false,
@@ -27,9 +27,8 @@ export async function login(email: string, password: string): Promise<LoginResul
       }
     }
 
-    // Create a simple token
-    const token = randomBytes(32).toString("hex")
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+    const token = generateToken()
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
     const cookieStore = await cookies()
     cookieStore.set("admin_token", token, {
@@ -40,15 +39,16 @@ export async function login(email: string, password: string): Promise<LoginResul
       expires: expiresAt,
     })
 
-    global.adminTokens = global.adminTokens || {}
+    if (!global.adminTokens) {
+      global.adminTokens = {}
+    }
+    
     global.adminTokens[token] = {
       email,
       expiresAt: expiresAt.getTime(),
     }
 
-    return {
-      success: true,
-    }
+    return { success: true }
   } catch (error) {
     console.error("Login error:", error)
     return {
@@ -76,7 +76,6 @@ export async function verifyAdminToken(): Promise<boolean> {
       return false
     }
 
-    // Check in-memory token storage
     if (global.adminTokens && global.adminTokens[token]) {
       const tokenData = global.adminTokens[token]
       if (tokenData.expiresAt > Date.now()) {
@@ -100,7 +99,6 @@ export async function getAdminUser() {
 
     if (!token) return null
 
-    // Check in-memory token storage
     if (!global.adminTokens || !global.adminTokens[token]) return null
 
     const tokenData = global.adminTokens[token]
