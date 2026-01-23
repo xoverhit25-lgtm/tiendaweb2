@@ -102,14 +102,15 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
   }
 
   const handleAddToCart = () => {
-    let variantInfo = ""
+    let quantityVariantInfo = ""
+    let flavorVariantInfo = ""
     let priceToUse = product.price
 
     if (hasQuantityVariants && selectedQuantityVariant) {
       const variant = product.quantityVariants![Number.parseInt(selectedQuantityVariant)]
       if (variant) {
         const rangeText = variant.max_quantity ? `${variant.min_quantity} a ${variant.max_quantity} unidades` : `${variant.min_quantity}+ unidades`
-        variantInfo = rangeText
+        quantityVariantInfo = rangeText
         priceToUse = variant.price
       }
     }
@@ -117,10 +118,12 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
     if (hasFlavorVariants && selectedFlavorVariant) {
       const variant = product.flavorVariants!.find((v: any) => v.id === selectedFlavorVariant)
       if (variant) {
-        variantInfo = variantInfo ? `${variantInfo} - ${variant.name}` : variant.name
+        flavorVariantInfo = variant.name
       }
     }
 
+    // Combinar variantes para mostrar en carrito
+    const variantInfo = [quantityVariantInfo, flavorVariantInfo].filter(Boolean).join(" - ")
     const uniqueId = variantInfo ? `${product.id}-${variantInfo}` : product.id.toString()
 
     addItem({
