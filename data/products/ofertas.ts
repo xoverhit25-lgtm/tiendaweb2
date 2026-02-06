@@ -235,7 +235,7 @@ export const ofertasProducts: Product[] = [
   id: 9017,
   name: "Vozol Luo Star 20000 Puffs",
   price: 8500,
-  image: "/images/vozol-luo-star-20000-puffs.webp",
+  image: "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/501/product-501-1770149053513-n095e8.webp",
   category: "Vapers",
   slug: "vozol-luo-star",
   description:
