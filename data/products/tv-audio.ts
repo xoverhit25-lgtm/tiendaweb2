@@ -506,7 +506,7 @@ export const tvAudioProducts: Product[] = [
   name: "Smart TV MTEK 58\" 4K UHD Android TV",
   price: 699000,
   image: "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/498/product-498-1770143732297-czy769.webp",
-  category: "tv-video",
+  category: "TV y Audio",
   slug: "television-tv-pulgadas",
   description:
     "Smart TV MTEK de 58 pulgadas con resolución 4K UHD y sistema Android TV 11 certificado por Google.\n\nCuenta con aplicaciones preinstaladas como Netflix, YouTube, Prime Video y Chromecast integrado, además de comando de voz, conectividad WiFi y Bluetooth, y sonido Dolby Audio.",
@@ -532,7 +532,7 @@ export const tvAudioProducts: Product[] = [
   name: "AirPod Max",
   price: 25000,
   image: "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/505/product-505-1770218503923-zi0p2.webp",
-  category: "audio",
+  category: "TV y Audio",
   slug: "airpod-max",
   description:
     "Auriculares AirPod Max con diseño premium, acabados metálicos y almohadillas acolchadas para mayor comodidad.\n\nOfrecen conexión Bluetooth rápida, sonido estéreo de buena calidad y micrófono integrado para llamadas.",
