@@ -259,4 +259,12 @@ export const ofertasProducts: Product[] = [
     { id: "vozol-luo-star-strawberry-ice", name: "Strawberry Ice", stock: "high" }
   ]
 },
+  {
+  name: "RAF ICE MARKER - Máquina de Hielo",
+  price: 140000,
+  image: "/raf-ice-maker-1.png",
+  category: "electrodomesticos",
+  slug: "raf-ice-marker-maquina-hielo",
+  
+},
 ]
