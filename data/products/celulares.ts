@@ -607,7 +607,7 @@ export const celularesProducts: Product[] = [
   {
   id: 9021,
   name: "iPhone 17 Pro Max 256 GB",
-  price: 1477000,
+  price: 1477,
   image: "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/485/product-485-1769796177105-922nse.webp",
   category: "celulares",
   slug: "Iphone-pro-max",
