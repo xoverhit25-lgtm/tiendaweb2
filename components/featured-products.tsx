@@ -18,11 +18,10 @@ function FeaturedProducts() {
     const featuredProducts = [
       bellezaProducts.find((p) => p.slug === "combo-karseell"),
       tecnologiaProducts.find((p) => p.slug === "apple-watch-serie-10"),
-      tvAudioProducts.find((p) => p.slug === "tv-marson-32-ultra-fino"),
+      tvAudioProducts.find((p) => p.slug === "television-tv-pulgadas"),
+      tvAudioProducts.find((p) => p.slug === "airpod-max"),
       tecnologiaProducts.find((p) => p.slug === "proyector-hy300-pro"),
       perfumeriaProducts.find((p) => p.slug === "body-splash-victorias-secret"),
-      celularesProducts.find((p) => p.slug === "redmi-a5-6-128gb"),
-      celularesProducts.find((p) => p.slug === "samsung-galaxy-a07-4gb-128gb"),
       celularesProducts.find((p) => p.slug === "iphone-17-pro-max-512gb"),
     ].filter(Boolean)
     return featuredProducts.slice(0, 8)
