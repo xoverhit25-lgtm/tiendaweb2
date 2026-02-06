@@ -22,7 +22,7 @@ function FeaturedProducts() {
       tvAudioProducts.find((p) => p.slug === "airpod-max"),
       tecnologiaProducts.find((p) => p.slug === "proyector-hy300-pro"),
       perfumeriaProducts.find((p) => p.slug === "body-splash-victorias-secret"),
-      celularesProducts.find((p) => p.slug === "iphone-17-pro-max-512gb"),
+      celularesProducts.find((p) => p.slug === "Iphone-pro-max"),
     ].filter(Boolean)
     return featuredProducts.slice(0, 8)
   }, [])
