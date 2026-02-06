@@ -604,4 +604,32 @@ export const celularesProducts: Product[] = [
   ],
   "stock": "high"
 },
+  {
+  id: 9021,
+  name: "iPhone 17 Pro Max 256 GB",
+  price: 1477000,
+  image: "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/485/product-485-1769796177105-922nse.webp",
+  category: "celulares",
+  slug: "Iphone-pro-max",
+  description:
+    "iPhone 17 Pro Max con 12 GB de RAM y 256 GB de almacenamiento.\n\nCuenta con eSIM integrada y SIM física para mayor flexibilidad, diseño unibody de aluminio forjado en caliente y Ceramic Shield frontal y trasero con hasta 4x más resistencia a golpes y 3x más a rayones. Incorpora sistema de cámaras Pro con sensores de 48 MP y zoom óptico de 8x, cámara frontal Center Stage de 18 MP con grabación dual, chip A19 Pro con enfriamiento por evaporación y hasta 40% más rendimiento sostenido. Ofrece batería de hasta 37 horas de reproducción de video, carga rápida al 50% en 20 minutos, iOS 26 con diseño Liquid Glass, detección de choques y compatibilidad con Apple Intelligence.",
+  stock: "high",
+  images: [
+    "https://esshtejldrtluhbofgly.supabase.co/storage/v1/object/public/product-images/products/485/product-485-1769796177105-922nse.webp"
+  ],
+  features: [
+    "12 GB de RAM",
+    "256 GB de almacenamiento",
+    "eSIM + SIM física",
+    "Cámaras Pro 48 MP con zoom óptico 8x",
+    "Cámara frontal 18 MP Center Stage",
+    "Chip A19 Pro",
+    "Batería hasta 37 hs de video",
+    "Carga rápida 50% en 20 min",
+    "iOS 26 con Liquid Glass",
+    "Detección de choques",
+    "Compatible con Apple Intelligence"
+  ]
+}
+
 ]
