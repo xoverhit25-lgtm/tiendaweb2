@@ -143,7 +143,7 @@ export const accesoriosCelularProducts: Product[] = [
   price: 11200,
   image: "/images/battery-pack.webp",
   category: "tecnologia",
-  slug: "battery-pack",
+  slug: "battery-pack-1",
   description:
     "Battery Pack portátil ideal para cargar tus dispositivos en cualquier momento.\n\nDisponible en distintas capacidades para adaptarse a diferentes necesidades de uso.",
   stock: "high",
