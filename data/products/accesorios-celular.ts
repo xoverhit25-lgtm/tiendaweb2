@@ -138,37 +138,30 @@ export const accesoriosCelularProducts: Product[] = [
     ],
   },
   {
-    id: 101,
-    name: "Battery Pack",
-    price: 11200,
-    image: "/images/baterry-pack.png",
-    category: "Accesorios para celular",
-    slug: "battery-pack",
-    description:
-      "Battery Pack es una batería externa portátil con tecnología MagSafe diseñada para proporcionar carga adicional sin necesidad de cables.\n\nSe adhiere magnéticamente a la parte posterior del iPhone o smartphone compatible, permitiendo extender la duración de la batería durante el día de forma práctica y segura.\n\nCuenta con un diseño compacto y liviano, ideal para transportar, e incorpora protección contra sobrecarga, indicador LED de nivel de batería y recarga mediante puerto USB-C.\n\nDisponible en diferentes capacidades según tus necesidades de uso.",
-    images: ["/images/baterry-pack.png", "/images/baterry-pack-1.png", "/images/baterry-pack-3.png"],
-    features: [
-      "Diseño compacto y portátil",
-      "Adhesión magnética MagSafe",
-      "Carga inalámbrica sin cables",
-      "Indicador LED de batería",
-      "Protección contra sobrecarga",
-      "Recarga mediante USB-C",
-      "Color blanco",
-    ],
-    quantityVariants: [
-      {
-        id: "battery-pack-5000mah",
-        name: "5000 mAh",
-        price: 11200,
-      },
-      {
-        id: "battery-pack-10000mah",
-        name: "10000 mAh",
-        price: 15000,
-      },
-    ],
-  },
+  id: 9018,
+  name: "Battery Pack",
+  price: 11200,
+  image: "/images/battery-pack.webp",
+  category: "tecnologia",
+  slug: "battery-pack",
+  description:
+    "Battery Pack portátil ideal para cargar tus dispositivos en cualquier momento.\n\nDisponible en distintas capacidades para adaptarse a diferentes necesidades de uso.",
+  stock: "high",
+  images: ["/images/battery-pack.webp"],
+  features: [
+    "Batería portátil",
+    "Carga de dispositivos móviles",
+    "Diseño compacto",
+    "Ideal para viajes",
+    "Variantes de capacidad"
+  ],
+  capacityVariants: [
+    { id: "battery-pack-5000mah", name: "5000mAh", price: 11200, stock: "high" },
+    { id: "battery-pack-7000mah", name: "7000mAh", price: 12500, stock: "high" },
+    { id: "battery-pack-10000mah", name: "10000mAh", price: 15000, stock: "high" },
+    { id: "battery-pack-20000mah", name: "20000mAh", price: 17500, stock: "high" }
+  ]
+},
   {
     id: 74,
     name: "Earpods apple salida C",
